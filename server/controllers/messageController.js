@@ -105,6 +105,13 @@ export const getMessages = async (req, res) => {
       // Emit the new message to the receiver using Socket.IO
       const receiverSocketId = userSocketMap[receiverId];
 
+      if(receiverSocketId){
+        io.to(receiverSocketId).emit("newMessage", {
+          message: newMessage,
+          senderId
+        })
+      }
+
       res.json({success: true, newMessage})
 
     }catch(error){
