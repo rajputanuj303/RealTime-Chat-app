@@ -6,7 +6,6 @@ import { connectDB } from "./lib/db.js";
 import userRouter from "./routes/userRoutes.js";
 import messageRouter from "./routes/messageRoutes.js";
 import { Server } from "socket.io";
-import {io, userSocketMap} from "./server.js";
 
 //CREATE EXPRESS APP AND HTTP SERVER
 const app = express();
@@ -30,11 +29,11 @@ io.on("connection", (socket) => {
   // Emit Online user to all connected clients
   io.emit("getOnlineUser", Object.keys(userSocketMap));
 
-  socket.on("disconnect", () =>{
+  socket.on("disconnect", () => {
     console.log(`User disconnected: ${userId}, Socket ID: ${socket.id}`);
     delete userSocketMap[userId];
     io.emit("getOnlineUser", Object.keys(userSocketMap));
-  })
+  });
 });
 
 //MIDDLEWARE SETUP
